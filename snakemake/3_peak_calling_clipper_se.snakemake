@@ -1,5 +1,4 @@
-## 现阶段尚未完成：主要原因是clipper软件安装时不报错，运行的时候命令和温昂中提供的不一致
-
+## not finish and not use
 include: './0_common.snakemake'
 
 output_dir = config.get("output_dir")
@@ -24,7 +23,7 @@ rule all:
 
 rule peak_calling_clipper:
     input:
-        bam_file='{output_dir}/bowtie_map/{sample_id}.bam'
+        bam_file='{output_dir}/mapping_bowtie/{sample_id}.bam'
     output:
         clipper_file='{output_dir}/peak_calling_clipper/{sample_id}.txt'
     threads: 
@@ -32,11 +31,9 @@ rule peak_calling_clipper:
     log:
         '{output_dir}/log/peak_calling_clipper/{sample_id}.log'
     shell:
-        '''conda activate clipper3; \
-            clipper \
+        '''/home/CLIPipe_user/bin/miniconda3/envs/clipper3/bin/clipper \
                     -b {input.bam_file} \
                     -s hg19 \
                     -o {output.clipper_file} \
                     --processors {threads}; \
-            conda activate clipipe
         '''

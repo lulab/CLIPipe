@@ -27,11 +27,11 @@ rule mapping_bowtie:
     output:
         sam='{output_dir}/mapping_bowtie/{sample_id}.sam'
     params:
-        bowtie1_index=config.get('reference_dir') + '/hg19/bowtie_index_hg19/Human_hg19'
+        bowtie1_index=config.get('reference_dir') + config.get('species') + '/bowtie_index/' + config.get('species')
     threads: 
         config.get('threads_mapping')
     log:
-        '{output_dir}/log/mapping_bowtie/{sample_id}.log'
+        '{output_dir}/log/mapping_bowtie/mapping_bowtie/{sample_id}.log'
     shell:
         '''bowtie \
             -f \
@@ -54,11 +54,10 @@ rule sam2bam:
     threads:
         config.get('threads_compress')
     log:
-        '{output_dir}/log/sam2bam/{sample_id}.log'
+        '{output_dir}/log/mapping_bowtie/sam2bam/{sample_id}.log'
     shell:
         '''samtools sort -@ {threads} {input.sam_file} > {output.bam_file}
         '''
-
 
 rule bam_index:
     input:
@@ -68,7 +67,7 @@ rule bam_index:
     threads:
         config.get('threads_mapping')
     log:
-        '{output_dir}/log/bam_index/{sample_id}.log'
+        '{output_dir}/log/mapping_bowtie/bam_index/{sample_id}.log'
     shell:
         '''samtools index -@ {threads} {input.bam_file}
         '''
@@ -81,7 +80,7 @@ rule bam2bed:
     threads:
         config.get('threads_compress')
     log:
-        '{output_dir}/log/bam2bed/{sample_id}.log'
+        '{output_dir}/log/mapping_bowtie/bam2bed/{sample_id}.log'
     shell:
         '''bedtools bamtobed -i {input.bam_file} > {output.bed_file}
         '''
