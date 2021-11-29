@@ -1,23 +1,20 @@
 
 # CLIPipe
 
-CLIPipe is an integrated pipeline for analyzing CLIP sequencing data.
+CLIPipe is an integrated pipeline for analyzing CLIP sequencing data. It provides all the commands needed to process CLIP-seq data, and it could identify and quantify sites of protein-RNA interactions on RNA from CLIP-seq data.
 
-![Pipeline of Tutorial](tutorial/CLIPipe_pipeline.png)
+![Pipeline of Tutorial](img/CLIPipe_pipeline.png)
 
 The CLIPipe workflow consists of:
 
-- Pre-processing function:
-  - Quality control, remove adapter, filter low quality reads, collpase duplicates, remove barcode of the raw CLIP-seq data.
-
-- Alignment function:
-  - mapping sequencing data to reference genome using bowtie, bwa and novoalign
-
-- Peak calling function:
-  - Peak calling of the CLIP-seq data using Piranha, CTK, PureCLIP, iCLIPro, iCount, JAMM, PEAKachu, PeakRanger and clipcontext
-
-- Motif discovery function:
-  - Motif discovery of the CLIP-seq data using HOMER, PhyloGibbs, MEME, GraphProt, DREME and STREME
+-   Pre-processing function:
+    -   Quality control, adapter removal, low-quality reads filtering, duplicates collapsing, and barcode removal of the raw CLIP-seq data.
+-   Alignment function:
+    -   Mapping pre-processed data to reference genome using bowtie, bwa, and novoalign
+-   Peak calling function:
+    -   Binding peak enrichment using Piranha, CTK, PureCLIP, iCLIPro, iCount, JAMM, PeakRanger, and clipcontext
+-   Motif discovery function:
+    -   Motif discovery of the binding regions using HOMER, PhyloGibbs, MEME, GraphProt, DREME and STREME
 
 ## Table of Contents:
 
@@ -31,15 +28,15 @@ The CLIPipe workflow consists of:
   - [Motif discovery](#motif-discovery)
 - [Copyright and License Information](#copyright-and-license-information)
 - [Citation](#citation)
-- [Tutorial](tutorial/)
+- [Tutorial](https://clipipe.readthedocs.io/)
 
 ## Requirements
 
 ### Software
-
-All required software and packages are already installed in docker, so there are no more requirements. You just need to install docker.
+All required software and packages are already installed in the docker, so there are no more requirements. You just need to install docker.
 
 -   docker
+
 
 ## Installation
 
@@ -53,28 +50,32 @@ All required software and packages are already installed in docker, so there are
          cd clipipe_test;
          wget http://clipipe.ncrnalab.org/clipipe_ref.tar.gz;
          wget http://clipipe.ncrnalab.org/clipipe_demo.tar.gz;
-         wget http://clipipe.ncrnalab.org/CLIPipe_v1.0.2_.tar.gz;
+         wget http://clipipe.ncrnalab.org/CLIPipe_v1.0.3_.tar.gz;
          tar -xvzf clipipe_ref.tar.gz;
          tar -xvzf clipipe_demo.tar.gz;
 
 #### Run CLIPipe Docker
 
-1.  [Docker](https://www.docker.com/) provides an easy way to run CLIPipe in a working environment that is completely separated from your host machine. All required software and packages are already installed in a ready-to-use image of CLIPipe docker, so there are no more requirements. you can use the docker image we provide: [CLIPipe Docker Image](https://hub.docker.com/). You can execute to get the docker `CLIPipe_1.0.X` container:
+1.  [Docker](https://www.docker.com/) provides an easy way to run CLIPipe in a working environment that is completely separated from your host machine. All required software and packages are already installed in a ready-to-use image of CLIPipe docker, so there are no more requirements. You can use the docker image we provide: [CLIPipe Docker Image](https://hub.docker.com/repository/docker/shangzhang/clipipe). And you may execute these commands to get the docker `CLIPipe_1.0.X` container:
          
          cd clipipe_test;
-         docker import CLIPipe_v1.0.2_.tar.gz zs/clipipe:1.0.2_test     ##import the docker
+         docker import CLIPipe_v1.0.3_.tar.gz zs/clipipe:1.0.3_test     ##import the docker
 
-         docker run --name=CLIPipe_1.0.2_test -t -d -h CLIPipe_docker --restart unless-stopped -v <the-absolute-path-of-current-directory>:/home/CLIPipe_user/clipipe zs/clipipe:1.0.2_test /bin/bash
+         docker run --name=CLIPipe_1.0.3_test -t -d -h CLIPipe_docker --restart unless-stopped -v <the-absolute-path-of-current-directory>:/home/CLIPipe_user/clipipe zs/clipipe:1.0.3_test /bin/bash
 
-    -   Make sure to create a local folder and provide the path to it. The example above uses a path that may not be applicable to your computer. Both, path to the folder on the host machine and path within the container (`/home/CLIPipe_user/clipipe`), must be absolute.
+    -   Make sure to create a local folder and provide the path to it. The example above uses a path that may not be applicable to your setup. Both, path to the folder on the host machine and path within the container (`/home/CLIPipe_user/clipipe`) must be absolute.
 
-2.  To show the docker `CLIPipe_1.0.2_test` container, you can execute:
+2.  To show the docker container `CLIPipe_1.0.3_test`, you can execute:
 
          docker container ls
 
-3.  To execute the `CLIPipe_1.0.2_test` container, you can execute:
+3.  To execute the contianer `CLIPipe_1.0.3_test`, you can execute:
 
-         docker exec -it CLIPipe_1.0.2_test bash
+         docker exec -it CLIPipe_1.0.3_test bash
+
+         cd /home/CLIPipe_user/clipipe;
+         find clipipe_demo  -type d  -exec chmod 777 {} \;
+         find clipipe_demo  -type f -exec chmod 666 {} \;
 
 4.  After entering the container, please change the user to `CLIPipe_user`
 
@@ -96,7 +97,7 @@ All required software and packages are already installed in docker, so there are
          commands needed to process protein-RNA CLIP interaction data and to identify and quantify
          sites of protein-RNA interactions on RNA.
 
-         CLIPipe's main input are FASTQ files with iCLIP sequencing data, its main output are BED files
+         CLIPipe's main input are FASTQ files with CLIP-seq data, its main output are BED files
          with identified and quantified cross-linked sites.
 
          A number of analyses are included in CLIPipe that provide insights into the properties of
@@ -114,7 +115,7 @@ All required software and packages are already installed in docker, so there are
 
 ### Use from source
 
-We have hide the details of each step which write by [Snakemake](https://snakemake.readthedocs.io/en/stable/) and you only need to run one single command. However you can use some of the codes if you are familiar with snakemake. The source code is [here](https://github.com/ShangZhang/clipipe).
+We have hide the details of each step using [Snakemake](https://snakemake.readthedocs.io/en/stable/) and you only need to run one single command. However, you can use some of the codes if you are familiar with snakemake. The source code is [here](https://github.com/ShangZhang/clipipe).
 
 ## Basic Usage
 The basic usage of CLIPipe is:
@@ -131,7 +132,7 @@ clipipe ${step_name} -d ${dataset}
 
 ### Reference data
 
-You can use the provided reference file to run CLIPipe, defaultly you can choose from Human_hg19 Human_hg38 Mouse_mm10 and Mouse_mm39, you can also create your own reference based on examples we provided
+You could use the provided reference file to run CLIPipe. Defaultly you may choose from hg19/hg38 (human) and mm10/mm39 (mouse). You can also create your own reference based on the scripts that we provided.
 
 ```bash
 ls /home/CLIPipe_user/clipipe/clipipe_ref/
@@ -203,7 +204,7 @@ read_length: 100
 
 ### Pre-processing
 
-CLIPipe provides pre-process step for raw CLIP-seq data. You needs to set up the `config/user_config.yaml` file correctly. The other parameters for pre-process step can be found in `config/default_config.yaml`.
+CLIPipe provides pre-process step for raw CLIP-seq data. You need to set up the `config/user_config.yaml` file correctly. The other parameters for pre-process step can be found in `config/default_config.yaml`.
 
 ```bash
 cd /home/CLIPipe_user/clipipe/clipipe_demo/general/;
@@ -274,7 +275,7 @@ CLIPipe provides multiple peak calling methods for identifying recurring fragmen
     </tr>
     <tr>
         <td>BrdU-CLIP</td>
-        <td>PureCLIP, iCLIPro,  iCount</td>
+        <td>CTK, PureCLIP, iCLIPro,  iCount</td>
     </tr>
     <tr>
         <td>Fr-iCLIP</td>
@@ -294,7 +295,7 @@ CLIPipe provides multiple peak calling methods for identifying recurring fragmen
     </tr>
     <tr>
         <td>uvCLAP</td>
-        <td>JAMM, PEAKachu</td>
+        <td>JAMM</td>
     </tr>
     <tr>
         <td>FLASH</td>
@@ -320,7 +321,7 @@ Note:
     The output folders `output_human_hg38/peak_calling_parclip_suite/` contain alignment results using parclip_suite.
 ```
 
-Several peak calling tools can be used in the CLIPipe docker directily:
+Several other peak calling tools can be used in the CLIPipe docker directily:
 
 ```bash
 # iCLIPro
@@ -332,9 +333,6 @@ $ iCount [-h] [-v] ...
 # JAMM
 $ JAMM.sh --help
 
-# PEAKachu
-$ peakachu [-h] [--version] {window,adaptive,coverage,consensus_peak} ...
-
 # PeakRanger
 $ peakranger <command> <arguments>
 
@@ -344,7 +342,7 @@ $ clipcontext [-h] [-v] {g2t,t2g,lst,int,exb,eir} ...
 
 ### Motif discovery
 
-The motif discovery function can be used directily in the CLIPipe docker:
+The motif discovery function can be used directly in the CLIPipe docker:
 
 For HOMER, the demo script like this:
 
@@ -389,7 +387,7 @@ fimo --thresh 0.01 -o FIMO_output meme.txt ${sample_id}.test_peak.fa; # the numb
 
 ```
 
-Other related tools are provided
+Other related tools are also provided:
 
 ```bash
 # PhyloGibbs
@@ -404,5 +402,3 @@ $ streme [options]
 Copyright (C) 2021 Tsinghua University, Beijing, China
 
 This program is licensed with commercial restriction use license. Please see the [LICENSE](https://github.com/ShangZhang/clipipe/blob/main/LICENSE) file for details.
-
-
