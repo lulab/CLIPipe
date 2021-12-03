@@ -23,7 +23,7 @@
 
          docker run --name=CLIPipe_1.0.3_test -t -d -h CLIPipe_docker --restart unless-stopped -v <the-absolute-path-of-current-directory>:/home/CLIPipe_user/clipipe zs/clipipe:1.0.3_test /bin/bash
 
-    -   Make sure to create a local folder and provide the path to it. The example above uses a path that may not be applicable to your setup. Both, path to the folder on the host machine and path within the container (`/home/CLIPipe_user/clipipe`) must be absolute.
+    -   Using `-v <the-absolute-path-of-current-directory>:/home/CLIPipe_user/clipipe`, we map the directory `the-absolute-path-of-current-directory` in host machine, where the data used the analysis resides (make sure to use absolute path), to directory `/home/CLIPipe_user/clipipe` inside docker container. Both, path to the folder on the host machine and path within the container (`/home/CLIPipe_user/clipipe`) must be absolute.
 
 2.  To show the docker container `CLIPipe_1.0.3_test`, you can execute:
 

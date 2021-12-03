@@ -59,10 +59,8 @@ threads_compress: 2
 threads_mapping: 4
 
 # pre process parameters
-paired_end: false
 barcode_length: 1
 adaptor1: AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC
-adaptor2: AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT
 
 # mapping parameters
 aligner: bowtie
@@ -121,11 +119,11 @@ CLIPipe provides multiple peak calling methods for identifying recurring fragmen
     </tr>
     <tr>
         <td>PAR-CLIP</td>
-        <td>PARA suite</td>
+        <td>CTK, PARA suite</td>
     </tr>
     <tr>
         <td>iCLIP</td>
-        <td>PureCLIP, iCLIPro, iCount</td>
+        <td>CTK, PureCLIP, iCLIPro, iCount</td>
     </tr>
     <tr>
         <td>iCLAP</td>
@@ -133,7 +131,7 @@ CLIPipe provides multiple peak calling methods for identifying recurring fragmen
     </tr>
     <tr>
         <td>eCLIP</td>
-        <td>PureCLIP, iCLIPro, iCount</td>
+        <td>CTK, PureCLIP, iCLIPro, iCount</td>
     </tr>
     <tr>
         <td>4sU-iCLIP</td>
@@ -180,7 +178,7 @@ CLIPipe provides multiple peak calling methods for identifying recurring fragmen
 
 ```bash
 cd /home/CLIPipe_user/clipipe/clipipe_demo/general/;
-clipipe -u ./config/user_config.yaml peak_calling;    # Please choose from Piranha(mapping method: biwtie) CTK(mapping method: novoalign) PureCLIP(mapping method: biwtie) parclip_suite(do not need mapping step)
+clipipe -u ./config/user_config.yaml peak_calling;    # Please choose from Piranha(mapping method: bowtie) CTK(mapping method: novoalign) PureCLIP(mapping method: biwtie) parclip_suite(do not need mapping step)
 ```
 
 ```text
@@ -248,7 +246,6 @@ perl /home/CLIPipe_user/clipipe2/clipipe_software/bin/meme/2.prepare_MEME.pl ${s
 perl /home/CLIPipe_user/clipipe2/clipipe_software/bin/meme/2.prepare_MEME.pl ${sample_id} test ${genome_fasta}
 
 # 3. run MEME on training dataset
-mkdir MEME_output
 meme ${sample_id}.training_peak.fa -o MEME_output -dna -minw 4 -maxw 10 -nmotifs 25 # the number of minw, maxw and nmotifs could change
 
 # 4. run FIMO on test dataset
